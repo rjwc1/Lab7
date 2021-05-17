@@ -5,7 +5,7 @@ export const router = {};
 /**
  * Changes the "page" (state) that your SPA app is currently set to
  */
-router.setState = function() {
+ router.setState = function(page, flag, postEntry) {
   /**
    * - There are three states that your SPA app will have
    *    1. The home page
@@ -35,4 +35,61 @@ router.setState = function() {
    *    1. You may add as many helper functions in this file as you like
    *    2. You may modify the parameters of setState() as much as you like
    */
+
+  if (page == 'Settings') {
+    const state = {'page_id': 'Settings'};
+    const title = 'settings';
+    const url = '/#settings';  
+
+    // for popstate
+    if (flag == 1) {
+      history.pushState(state, title, url);
+    }
+
+    // Change header
+    document.querySelector('h1').innerHTML = "Settings";
+
+    // Change settings class body
+    document.querySelector('body').className = "settings";
+  } else if (page == "Head") {
+    const state = {'page_id': 'Head'};
+    const title = 'Journal Entries'
+    const url = '/';
+
+    // popstate
+    if (flag == 1) {
+      history.pushState(state, title, url);
+    }
+
+    // Change header
+    document.querySelector('h1').innerHTML = "Journal Entries";
+
+    // Change settings class body
+    document.querySelector('body').className = "";
+  } else if (page == "Entry") {
+    const state = { 'page_id': 'Entry'};
+    const title = 'Entries';
+    const url = '/#entry' + postEntry.id; 
+
+    // Add journal information
+    let entryPage = document.createElement('entry-page');
+    let preEntry =  document.querySelector('entry-page');   
+
+    entryPage.entry = postEntry.entry;
+
+    document.querySelector('body').removeChild(preEntry);
+    document.querySelector('body').appendChild(entryPage);
+
+    if (flag == 1) {
+      history.pushState(state, title, url);
+    }
+
+    // Change header
+    document.querySelector('h1').innerHTML = "Entry " + postEntry.id;
+
+    // Change settings class body
+    document.querySelector('body').className = "single-entry";
+  } else {
+    console.log("ERROR");
+  }
 }
